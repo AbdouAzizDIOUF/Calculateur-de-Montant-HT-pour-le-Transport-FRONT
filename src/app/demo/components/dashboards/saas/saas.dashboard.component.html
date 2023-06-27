@@ -1,0 +1,205 @@
+<div class="grid">
+    <div class="col-12 lg:col-6 xl:col-3" (click)="getClients()" style="cursor: pointer">
+        <div class="card p-0 overflow-hidden flex flex-column">
+            <div class="flex align-items-center p-3">
+                <i class="pi pi-users text-6xl text-blue-500"></i>
+                <div class="ml-3">
+                    <span class="text-blue-500 block white-space-nowrap">CLIENTS</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/users' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full" alt="users">
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-3" (click)="getLocalites()" style="cursor: pointer">
+        <div class="card p-0 overflow-hidden flex flex-column">
+            <div class="flex align-items-center p-3">
+                <i class="pi pi-map text-6xl text-orange-500"></i>
+                <div class="ml-3">
+                    <span class="text-orange-500 block white-space-nowrap">Localités</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/locations' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full" alt="locations">
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-3" (click)="getTaxation()" style="cursor: pointer">
+        <div class="card p-0 overflow-hidden flex flex-column">
+            <div class="flex align-items-center p-3">
+                <i class="pi pi-directions text-6xl text-green-500"></i>
+                <div class="ml-3">
+                    <span class="text-green-500 block white-space-nowrap">Conditions de Taxation</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/rate' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full" alt="conversion">
+        </div>
+    </div>
+    <div class="col-12 lg:col-6 xl:col-3" (click)="getTarifs()" style="cursor: pointer">
+        <div class="card h-full p-0 overflow-hidden flex flex-column">
+            <div class="flex align-items-center p-3">
+                <i class="pi pi-euro text-6xl text-purple-500"></i>
+                <div class="ml-3">
+                    <span class="text-purple-500 block white-space-nowrap">Tarifs</span>
+                </div>
+            </div>
+            <img [src]="'assets/demo/images/dashboard/interactions' + (colorScheme === 'light' ? '' : '-dark') + '.svg'" class="w-full mt-auto" alt="interactions">
+        </div>
+    </div>
+
+
+
+
+</div>
+<div class="card">
+    <p-table #dt [value]="clients" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+             [globalFilterFields]="['idClient','raisonSociale','codePostal']" *ngIf="clients && clients.length > 0">
+        <ng-template pTemplate="caption">
+            <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
+                <span class="p-input-icon-left w-full sm:w-20rem flex-order-1 sm:flex-order-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Global Search" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idClient" class="white-space-nowrap" style="width:25%">idClient <p-sortIcon field="idClient"></p-sortIcon></th>
+                <th pSortableColumn="raisonSociale" class="white-space-nowrap" style="width:25%">raisonSociale <p-sortIcon field="raisonSociale"></p-sortIcon></th>
+<!--
+                <th pSortableColumn="date" class="white-space-nowrap" style="width:25%">codePostal <p-sortIcon field="date"></p-sortIcon></th>
+-->
+                <th pSortableColumn="codePostal" class="white-space-nowrap" style="width:25%">codePostal <p-sortIcon field="codePostal"></p-sortIcon></th>
+                <th pSortableColumn="ville" class="white-space-nowrap" style="width:25%">ville <p-sortIcon field="villes"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-client>
+            <tr>
+                <td>{{client.idClient}}</td>
+                <td>
+                    <span class="image-text">{{client.raisonSociale}}</span>
+                </td>
+               <!-- <td>{{customer.date | date: 'MM/dd/yyyy'}}</td>-->
+                <td>
+                    <div class="inline-flex align-items-center">
+                        <span>{{client.codePostal}}</span>
+                    </div>
+                </td>
+                <td>{{client.ville}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-table #dt [value]="tarifs" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+             [globalFilterFields]="['idClient','idClientHeritage','codeDepartement', 'montant', 'zone']" *ngIf="tarifs && tarifs.length > 0">
+        <ng-template pTemplate="caption">
+            <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
+                <span class="p-input-icon-left w-full sm:w-20rem flex-order-1 sm:flex-order-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Global Search" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idClient" class="white-space-nowrap" style="width:25%"><!--ID Client--> <p-sortIcon field="idClient"></p-sortIcon></th>
+                <th pSortableColumn="idClientHeritage" class="white-space-nowrap" style="width:25%">ID Client Heritage <p-sortIcon field="idClientHeritage"></p-sortIcon></th>
+
+                <th pSortableColumn="codeDepartement" class="white-space-nowrap" style="width:25%">Code Departement <p-sortIcon field="codeDepartement"></p-sortIcon></th>
+
+                <th pSortableColumn="montant" class="white-space-nowrap" style="width:25%">Montant <p-sortIcon field="montant"></p-sortIcon></th>
+                <th pSortableColumn="zone" class="white-space-nowrap" style="width:25%">Zone <p-sortIcon field="zone"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-tarif>
+            <tr>
+                <td>{{tarif.idClient}}</td>
+                <td>
+                    <span class="image-text">{{tarif.idClientHeritage}}</span>
+                </td>
+                <td>
+                    <span class="image-text">{{tarif.codeDepartement}}</span>
+                </td>
+                <td>
+                    <div class="inline-flex align-items-center">
+                        <span>{{tarif.montant}}</span>
+                    </div>
+                </td>
+                <td>{{tarif.zone}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-table #dt [value]="taxtations" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+             [globalFilterFields]="['idClient','taxePortDu','taxePortPaye']" *ngIf="taxtations && taxtations.length > 0">
+        <ng-template pTemplate="caption">
+            <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
+                <span class="p-input-icon-left w-full sm:w-20rem flex-order-1 sm:flex-order-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Global Search" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="idClient" class="white-space-nowrap" style="width:25%">ID Client<p-sortIcon field="idClient"></p-sortIcon></th>
+                <th pSortableColumn="taxePortDu" class="white-space-nowrap" style="width:25%">Taxe PortDu<p-sortIcon field="taxePortDu"></p-sortIcon></th>
+                <th pSortableColumn="taxePortPaye" class="white-space-nowrap" style="width:25%">Taxe Port Paye <p-sortIcon field="taxePortPaye"></p-sortIcon></th>
+                <th pSortableColumn="useTaxePortDuGenerale" class="white-space-nowrap" style="width:25%">Use Taxe Port Du Generale <p-sortIcon field="useTaxePortDuGenerale"></p-sortIcon></th>
+                <th pSortableColumn="useTaxePortPayeGenerale" class="white-space-nowrap" style="width:25%">Use Taxe Port Paye Generale <p-sortIcon field="useTaxePortPayeGenerale"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-taxtation>
+            <tr>
+                <td>{{taxtation.idClient}}</td>
+                <td>
+                    <span class="image-text">{{taxtation.taxePortDu}}</span>
+                </td>
+                <td>{{taxtation.taxePortPaye}}</td>
+                <td>
+                    <div class="inline-flex align-items-center">
+                        <span>{{taxtation.useTaxePortDuGenerale}}</span>
+                    </div>
+                </td>
+                <td>{{taxtation.useTaxePortPayeGenerale}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-table #dt [value]="localites" [paginator]="true" [rows]="10" [showCurrentPageReport]="true" responsiveLayout="scroll"
+             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [rowsPerPageOptions]="[10,25,50]"
+             [globalFilterFields]="['codePostal','ville','zone']" *ngIf="localites && localites.length > 0">
+        <ng-template pTemplate="caption">
+            <div class="flex flex-wrap gap-2 align-items-center justify-content-between">
+                <span class="p-input-icon-left w-full sm:w-20rem flex-order-1 sm:flex-order-0">
+                    <i class="pi pi-search"></i>
+                    <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Global Search" class="w-full" />
+                </span>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="codePostal" class="white-space-nowrap" style="width:25%">Code Postal <p-sortIcon field="idClient"></p-sortIcon></th>
+                <th pSortableColumn="ville" class="white-space-nowrap" style="width:25%">Ville <p-sortIcon field="ville"></p-sortIcon></th>
+                <!--
+                                <th pSortableColumn="date" class="white-space-nowrap" style="width:25%">codePostal <p-sortIcon field="date"></p-sortIcon></th>
+                -->
+                <th pSortableColumn="zone" class="white-space-nowrap" style="width:25%">zone <p-sortIcon field="zone"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-localite>
+            <tr>
+                <td>{{localite.codePostal}}</td>
+                <td>
+                    <span class="image-text">{{localite.ville}}</span>
+                </td>
+                <!-- <td>{{customer.date | date: 'MM/dd/yyyy'}}</td>-->
+                <td>
+                    <div class="inline-flex align-items-center">
+                        <span>{{localite.zone}}</span>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
