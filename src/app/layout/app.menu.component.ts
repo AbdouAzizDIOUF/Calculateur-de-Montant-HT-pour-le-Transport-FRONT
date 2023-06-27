@@ -20,15 +20,15 @@ export class AppMenuComponent implements OnInit {
             },
 
             {
-                label: 'Pages',
+                label: 'Pages Calcul Transport',
                 icon: 'pi pi-fw pi-briefcase',
                 routerLink: ['/pages/crud'],
             },
 
-            {
+            /*{
                 label: 'Start', icon: 'pi pi-download',
                 routerLink: ['/pages/notfound']
-            }
+            }*/
         ];
     }
 }
